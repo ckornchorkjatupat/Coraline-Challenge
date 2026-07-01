@@ -1,0 +1,22 @@
+services:
+  game-service:
+    image: game-service:latest
+    build: null
+  score-service:
+    image: score-service:latest
+    build: null
+
+  postgres:
+    image: postgres:16-alpine
+    restart: always              # auto-restart ถ้า server reboot
+    environment:
+      POSTGRES_USER: ${DB_USER}      # ใช้ .env แทน hardcode
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U appuser"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
