@@ -1,0 +1,38 @@
+
+upstream game_service {
+  server game-service:${GAME_SERVICE_PORT};
+}
+
+upstream score_service {
+  server score-service:${SCORE_SERVICE_PORT};
+}
+
+upstream frontend {
+  server frontend:${FRONTEND_PORT};
+}
+
+server {
+  listen ${NGINX_PORT};
+
+  location ${GAME_API_LOCATION} {
+    proxy_pass http://game_service/;
+    proxy_set_header Host $host;
+  }
+
+  location ${SCORE_API_LOCATION} {
+    proxy_pass http://score_service/;
+    proxy_set_header Host $host;
+  }
+
+  location ${WS_LOCATION} {
+    proxy_pass http://score_service;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+  }
+
+  location ${FRONTEND_LOCATION} {
+    proxy_pass http://frontend;
+    proxy_set_header Host $host;
+  }
+}
