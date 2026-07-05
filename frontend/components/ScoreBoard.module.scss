@@ -1,0 +1,29 @@
+.scoreBoard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5 rem;
+  margin-left: var(--label-width);
+  font-size: 1rem;
+  align-items: center;
+
+  @media (max-width:480px) {
+    font-size: 0.75rem;
+    margin-left: var(--label-width-480);
+  }
+}
+
+.row {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  max-width: 300px;
+}
+
+.label,
+.unit {
+  font-weight: 200;
+}
+
+.value {
+  font-weight: 600;
+}

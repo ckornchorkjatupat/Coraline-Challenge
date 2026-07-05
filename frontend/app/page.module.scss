@@ -1,0 +1,28 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 2rem;
+
+  @media (max-width: 480px) {
+    padding: 1rem;
+  }
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: clamp(2rem, 8vh, 8vh);
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0;
+  border: none;
+
+  @media (max-width: 480px) {
+    gap: clamp(1.5rem, 6vh, 2.5rem);
+  }
+}
