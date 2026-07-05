@@ -1,5 +1,5 @@
 import { IsIn } from 'class-validator';
-import { Action } from '../types/action.type';
+import type { Action } from '../types/action.type';
 
 export class PlayActionDto {
   @IsIn(['ROCK', 'PAPER', 'SCISSORS'])

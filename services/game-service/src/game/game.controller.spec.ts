@@ -6,9 +6,19 @@ describe('GameController', () => {
   let gameController: GameController;
   let gameService: GameService;
 
+  const mockPlayerId = 'test-player-id';
   const mockGameService = {
     play: jest.fn(),
   };
+  const mockRequestWithPlayerId = {
+    cookies: { playerId: mockPlayerId },
+  } as any;
+  const mockRequestWithOutPlayerId = {
+    cookies: {},
+  } as any;
+  const mockResponse = {
+    cookie: jest.fn(),
+  } as any;
 
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
@@ -33,15 +43,39 @@ describe('GameController', () => {
     expect(gameController).toBeDefined();
   });
 
-  it('should call gameService.play with the correct action', async () => {
+  it('should create playerId and set cookie if have no playerId', async () => {
     mockGameService.play.mockResolvedValue({
       botAction: 'SCISSORS',
       result: 'WIN',
     });
 
-    const result = await gameController.play({ action: 'ROCK' });
+    const result = await gameController.play(
+      { action: 'ROCK' },
+      mockRequestWithOutPlayerId,
+      mockResponse,
+    );
 
-    expect(gameService.play).toHaveBeenCalledWith('ROCK');
-    expect(result).toEqual({ botAction: 'SCISSORS', result: 'WIN' });
+    expect(mockResponse.cookie).toHaveBeenCalledWith(
+      'playerId',
+      expect.any(String),
+      expect.any(Object),
+    );
+    expect(gameService.play).toHaveBeenCalledWith('ROCK', expect.any(String));
+  });
+
+  it('should use playerId in cookie', async () => {
+    mockGameService.play.mockResolvedValue({
+      botAction: 'SCISSORS',
+      result: 'WIN',
+    });
+
+    const result = await gameController.play(
+      { action: 'ROCK' },
+      mockRequestWithPlayerId,
+      mockResponse,
+    );
+
+    expect(mockResponse.cookie).not.toHaveBeenCalled();
+    expect(gameService.play).toHaveBeenCalledWith('ROCK', mockPlayerId);
   });
 });

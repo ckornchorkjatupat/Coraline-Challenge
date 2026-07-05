@@ -1,17 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Action, GameResult } from './types/action.type';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
 export class GameService {
+  constructor(@Inject('SCORE_SERVICE') private readonly client: ClientProxy) {}
+
   private beats: Record<Action, Action> = {
     ROCK: 'SCISSORS',
     PAPER: 'ROCK',
     SCISSORS: 'PAPER',
   };
 
-  async play(
-    playerAction: Action,
-  ): Promise<{ botAction: Action; result: GameResult }> {
+  play(playerAction: Action, playerId: string) {
     const actions: Action[] = ['ROCK', 'PAPER', 'SCISSORS'];
     const botAction = actions[Math.floor(Math.random() * 3)];
 
@@ -19,8 +20,11 @@ export class GameService {
     if (botAction !== playerAction) {
       result = this.beats[playerAction] == botAction ? 'WIN' : 'LOSE';
     }
-
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    if (result === 'WIN') {
+      this.client.emit('game.won', { playerId });
+    } else if (result === 'LOSE') {
+      this.client.emit('game.lost', { playerId });
+    }
 
     return { botAction, result };
   }
