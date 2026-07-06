@@ -1,0 +1,31 @@
+meta {
+  name: Get Session
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/score/player/session
+  body: none
+  auth: inherit
+}
+
+tests {
+  test('should return status 200', () => {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test('should return currentScore and highScore', () => {
+    const body = res.getBody();
+    expect(body.currentScore).to.be.a('number'); 
+    expect(body.highScore).to.be.a('number');
+  });
+  
+  test('should currentScore and highScore not be negative', () => {
+    const body = res.getBody();
+    expect(body.currentScore).to.be.at.least(0);
+    expect(body.highScore).to.be.at.least(0);
+  })
+  
+  
+}

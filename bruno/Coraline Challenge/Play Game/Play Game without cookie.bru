@@ -1,0 +1,39 @@
+meta {
+  name: Play Game without cookie
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/game/game/play
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "action": "ROCK"
+  }
+}
+
+script:pre-request {
+  await bru.cookies.remove('playerId');
+}
+
+tests {
+  test('should return status 201', () => {
+    expect(res.getStatus()).to.equal(201);
+  });
+  
+  test('should return botAction', () => {
+    const body = res.getBody();
+    expect(body).to.have.property('botAction');
+    expect(['ROCK', 'PAPER', 'SCISSORS']).to.include(body.botAction);
+  });
+  
+  test('should return result', () => {
+    const body = res.getBody();
+    expect(body).to.have.property('result');
+    expect(['WIN', 'LOSE', 'DRAW']).to.include(body.result);
+  });
+}

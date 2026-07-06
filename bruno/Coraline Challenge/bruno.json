@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "Coraline Challenge",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

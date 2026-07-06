@@ -1,0 +1,23 @@
+meta {
+  name: Play Game with invalid Action
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/api/game/game/play
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "action": "WATER"
+  }
+}
+
+tests {
+  test('should return status 400', () => {
+    expect(res.getStatus()).to.equal(400);
+  });
+}
