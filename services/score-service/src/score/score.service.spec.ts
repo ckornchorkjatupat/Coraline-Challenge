@@ -40,17 +40,6 @@ describe('ScoreService', () => {
     expect(scoreService).toBeDefined();
   });
 
-  describe('getScores', () => {
-    it('should return this player currentScore and highScore', async () => {
-      const player = { id: 'abc', currentScore: 2, highScore: 5 } as Player;
-      mockPlayerService.findOrCreate.mockResolvedValue(player);
-
-      const result = await scoreService.getScores('abc');
-
-      expect(result).toEqual({ currentScore: 2, highScore: 5 });
-    });
-  });
-
   describe('resetScore', () => {
     it('should reset currentScore and not reset highScore', async () => {
       const player = { id: 'abc', currentScore: 2, highScore: 5 } as Player;

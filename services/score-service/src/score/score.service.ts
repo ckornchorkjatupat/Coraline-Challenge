@@ -9,14 +9,6 @@ export class ScoreService {
     private readonly scoreGateway: ScoreGateway,
   ) {}
 
-  async getScores(playerId: string): Promise<{
-    currentScore: number;
-    highScore: number;
-  }> {
-    const player = await this.playerService.findOrCreate(playerId);
-    return { currentScore: player.currentScore, highScore: player.highScore };
-  }
-
   async resetScore(playerId: string): Promise<void> {
     const player = await this.playerService.findOrCreate(playerId);
     player.currentScore = 0;

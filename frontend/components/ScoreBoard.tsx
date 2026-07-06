@@ -11,12 +11,12 @@ export function ScoreBoard({ currentScore, highScore }: ScoreBoardProps) {
       <div className={styles.row}>
         <span className={styles.label}>Your Score:</span>
         <span className={styles.value}>{currentScore}</span>
-        <span className={styles.unit}>trun</span>
+        <span className={styles.unit}>turn</span>
       </div>
       <div className={styles.row}>
         <span className={styles.label}>High Score:</span>
         <span className={styles.value}>{highScore}</span>
-        <span className={styles.unit}>trun</span>
+        <span className={styles.unit}>turn</span>
       </div>
     </div>
   )

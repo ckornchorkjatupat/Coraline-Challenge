@@ -2,20 +2,15 @@
 
 import { useSession } from '../hooks/useSession';
 import { useGame } from "../hooks/useGame";
-import { useHighScoreSocket } from '../hooks/useHighScoreSocket';
 import { ScoreBoard } from '../components/ScoreBoard';
 import { BotDisplay } from '../components/BotDisplay';
 import { ActionButtons } from '../components/ActionButtons';
 import styles from './page.module.scss'
 
 export default function Home() {
-  const { currentScore, highScore, setHighScore, loading, refetch } = useSession();
+  const { currentScore, highScore, loading, refetch } = useSession();
   const { botAction, isWaiting, handlePlay } = useGame(() => {
     refetch();
-  })
-
-  useHighScoreSocket((newHighScore) => {
-    setHighScore(newHighScore)
   })
 
   if (loading) return <div>Loading ...</div>;
