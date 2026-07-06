@@ -84,7 +84,6 @@ Both commands should print a version number with no errors.
 ```bash
 git clone https://github.com/ckornchorkjatupat/Coraline-Challenge.git coraline-challenge
 cd coraline-challenge
-git checkout Development   # or the branch you want to deploy
 ```
 
 ---
