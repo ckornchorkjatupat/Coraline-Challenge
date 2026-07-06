@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { GameService } from './game.service';
 import { Action } from './types/action.type';
-
+import { of } from 'rxjs';
 describe('GameService', () => {
   let gameService: GameService;
   const randomValueFor: Record<Action, number> = {
@@ -11,7 +11,7 @@ describe('GameService', () => {
   };
   const mockPlayerId = 'test-player-id';
   const mockClientProxy = {
-    emit: jest.fn(),
+    emit: jest.fn().mockReturnValue(of(undefined)),
   };
 
   beforeEach(async () => {
@@ -44,7 +44,6 @@ describe('GameService', () => {
     jest.spyOn(Math, 'random').mockReturnValue(randomValueFor.SCISSORS);
 
     const promise = gameService.play('ROCK', mockPlayerId);
-    jest.advanceTimersByTime(2000);
 
     const { botAction, result } = await promise;
 
@@ -59,7 +58,6 @@ describe('GameService', () => {
     jest.spyOn(Math, 'random').mockReturnValue(randomValueFor.PAPER);
 
     const promise = gameService.play('ROCK', mockPlayerId);
-    jest.advanceTimersByTime(2000);
 
     const { botAction, result } = await promise;
     expect(botAction).toBe('PAPER');
@@ -73,7 +71,6 @@ describe('GameService', () => {
     jest.spyOn(Math, 'random').mockReturnValue(randomValueFor.ROCK);
 
     const promise = gameService.play('ROCK', mockPlayerId);
-    jest.advanceTimersByTime(2000);
 
     const { botAction, result } = await promise;
     expect(botAction).toBe('ROCK');
@@ -85,7 +82,6 @@ describe('GameService', () => {
     jest.spyOn(Math, 'random').mockReturnValue(randomValueFor.ROCK);
 
     const promise = gameService.play('PAPER', mockPlayerId);
-    jest.advanceTimersByTime(2000);
 
     const { botAction, result } = await promise;
     expect(botAction).toBe('ROCK');
@@ -96,7 +92,6 @@ describe('GameService', () => {
     jest.spyOn(Math, 'random').mockReturnValue(randomValueFor.SCISSORS);
 
     const promise = gameService.play('PAPER', mockPlayerId);
-    jest.advanceTimersByTime(2000);
 
     const { botAction, result } = await promise;
     expect(botAction).toBe('SCISSORS');
@@ -110,7 +105,6 @@ describe('GameService', () => {
     jest.spyOn(Math, 'random').mockReturnValue(randomValueFor.PAPER);
 
     const promise = gameService.play('PAPER', mockPlayerId);
-    jest.advanceTimersByTime(2000);
 
     const { botAction, result } = await promise;
     expect(botAction).toBe('PAPER');
@@ -122,7 +116,6 @@ describe('GameService', () => {
     jest.spyOn(Math, 'random').mockReturnValue(randomValueFor.PAPER);
 
     const promise = gameService.play('SCISSORS', mockPlayerId);
-    jest.advanceTimersByTime(2000);
 
     const { botAction, result } = await promise;
     expect(botAction).toBe('PAPER');
@@ -133,7 +126,6 @@ describe('GameService', () => {
     jest.spyOn(Math, 'random').mockReturnValue(randomValueFor.ROCK);
 
     const promise = gameService.play('SCISSORS', mockPlayerId);
-    jest.advanceTimersByTime(2000);
 
     const { botAction, result } = await promise;
     expect(botAction).toBe('ROCK');
@@ -147,7 +139,6 @@ describe('GameService', () => {
     jest.spyOn(Math, 'random').mockReturnValue(randomValueFor.SCISSORS);
 
     const promise = gameService.play('SCISSORS', mockPlayerId);
-    jest.advanceTimersByTime(2000);
 
     const { botAction, result } = await promise;
     expect(botAction).toBe('SCISSORS');
