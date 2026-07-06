@@ -33,7 +33,7 @@ services:
       timeout: 5s
       retries: 5
 
-  game-service:
+  game-service-1:
     build:
       context: ./services/game-service
       dockerfile: Dockerfile
@@ -49,7 +49,46 @@ services:
     expose:
       - "${GAME_SERVICE_PORT}"
 
-  score-service:
+  game-service-2:
+    build:
+      context: ./services/game-service
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      NGINX_URL: ${NGINX_URL}
+      FRONTEND_URL: ${FRONTEND_URL}
+      RABBITMQ_URL: amqp://${RABBIT_USER}:${RABBIT_PASS}@${RABBIT_HOST}:${RABBIT_PORT}
+      PORT: ${GAME_SERVICE_PORT}
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    expose:
+      - "${GAME_SERVICE_PORT}"
+
+  score-service-1:
+    build:
+      context: ./services/score-service
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      NGINX_URL: ${NGINX_URL}
+      FRONTEND_URL: ${FRONTEND_URL}
+      RABBITMQ_URL: amqp://${RABBIT_USER}:${RABBIT_PASS}@${RABBIT_HOST}:${RABBIT_PORT}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      PORT: ${SCORE_SERVICE_PORT}
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    expose:
+      - "${SCORE_SERVICE_PORT}"
+
+  score-service-2:
     build:
       context: ./services/score-service
       dockerfile: Dockerfile
@@ -104,8 +143,10 @@ services:
       - "${NGINX_PORT}:${NGINX_PORT}"
     depends_on:
       - frontend
-      - game-service
-      - score-service
+      - game-service-1
+      - game-service-2
+      - score-service-1
+      - score-service-2
 
 volumes:
   postgres_data:

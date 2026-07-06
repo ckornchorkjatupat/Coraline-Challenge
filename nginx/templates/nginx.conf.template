@@ -1,10 +1,12 @@
 
 upstream game_service {
-  server game-service:${GAME_SERVICE_PORT};
+  server game-service-1:${GAME_SERVICE_PORT};
+  server game-service-2:${GAME_SERVICE_PORT};
 }
 
 upstream score_service {
-  server score-service:${SCORE_SERVICE_PORT};
+  server score-service-1:${SCORE_SERVICE_PORT};
+  server score-service-2:${SCORE_SERVICE_PORT};
 }
 
 upstream frontend {
